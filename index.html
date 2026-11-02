@@ -120,11 +120,43 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .ch-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh);margin-bottom:14px;display:flex;align-items:center;gap:14px}
 .insight-pill{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--sh);font-size:13px;line-height:1.55;color:var(--fg2)}
 .insight-pill b{color:var(--fg)}
-.idea-row{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh);display:flex;align-items:center;gap:12px}
+.idea-row{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;box-shadow:var(--sh);overflow:hidden;cursor:pointer}
+.idea-top{padding:14px 16px;display:flex;align-items:center;gap:12px}
 .idea-num{width:28px;height:28px;border-radius:8px;background:var(--acc-dim);display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Syne',sans-serif;font-weight:700;color:var(--acc);flex-shrink:0}
-.idea-text{flex:1;min-width:0;font-size:14px;line-height:1.5;color:var(--fg)}
-.copy-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px;flex-shrink:0;opacity:.7;transition:opacity .15s}
-.copy-btn:active{opacity:1}
+.idea-text{flex:1;min-width:0;font-size:14px;line-height:1.5;color:var(--fg);font-weight:500}
+.idea-chev{font-size:13px;color:var(--fg2);flex-shrink:0;transition:transform .2s}
+.idea-chev.open{transform:rotate(180deg)}
+.idea-brief{display:none;padding:0 16px 14px;border-top:1px solid var(--border)}
+.idea-brief.open{display:block}
+.brief-row{margin-top:10px}
+.brief-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--acc);margin-bottom:3px}
+.brief-val{font-size:13px;color:var(--fg2);line-height:1.55}
+.brief-val li{margin-left:16px;margin-bottom:2px}
+.copy-btn{background:var(--acc-dim);border:none;cursor:pointer;font-size:12px;padding:7px 12px;flex-shrink:0;border-radius:8px;color:var(--acc);font-weight:700;font-family:'Inter',sans-serif;margin-top:10px;display:inline-block}
+.copy-btn:active{opacity:.7}
+/* CHAT */
+.chat-fab{position:sticky;bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 14px);float:right;background:linear-gradient(135deg,#7c3aed,#00C896);border:none;border-radius:50px;padding:12px 18px;color:#fff;font-size:13px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,150,.4);display:flex;align-items:center;gap:7px;z-index:10;margin-right:0}
+.chat-fab svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2}
+.chat-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:14px;box-shadow:var(--sh)}
+.chat-hdr{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.chat-hdr-ico{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#00C896);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.chat-hdr-txt{font-size:13px;font-weight:600;color:var(--fg)}
+.chat-hdr-sub{font-size:11px;color:var(--fg2);margin-top:1px}
+.chat-msgs{max-height:320px;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:85%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.55}
+.msg-user{align-self:flex-end;background:var(--acc);color:#000;border-bottom-right-radius:4px}
+.msg-ai{align-self:flex-start;background:var(--card);border:1px solid var(--border);color:var(--fg);border-bottom-left-radius:4px}
+.msg-ai b{color:var(--acc)}
+.chat-input-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);align-items:flex-end}
+.chat-inp{flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:9px 12px;font-size:14px;color:var(--fg);font-family:'Inter',sans-serif;outline:none;resize:none;max-height:80px;line-height:1.4}
+.chat-inp:focus{border-color:var(--acc)}
+.chat-send{background:var(--acc);border:none;border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.chat-send svg{width:16px;height:16px;fill:none;stroke:#000;stroke-width:2.2}
+.chat-send:active{opacity:.75}
+.ai-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#7c3aed;background:rgba(124,58,237,.1);border-radius:100px;padding:3px 9px;margin-bottom:10px}
+.typing-dot{display:inline-block;width:6px;height:6px;background:var(--fg2);border-radius:50%;animation:blink 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:.2s}.typing-dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 .handle-wrap{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .15s}
 .handle-wrap:focus-within{border-color:var(--acc)}
 .handle-pre{padding:0 4px 0 13px;color:var(--fg2);font-size:15px}
@@ -235,7 +267,8 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').repl
 
 // ── YOUTUBE DATA ──────────────────────────────────────
 const YT_KEY='myspace_yt';
-let YT={apiKey:'',handle:'',niche:'',channelId:'',uploadsId:'',channelName:'',subs:0,videos:[],trending:[],lastRefresh:''};
+let YT={apiKey:'',geminiKey:'',handle:'',niche:'',channelId:'',uploadsId:'',channelName:'',subs:0,videos:[],trending:[],ideas:[],lastRefresh:''};
+let chatHistory=[];let chatOpen=false;
 function loadYT(){try{const d=JSON.parse(localStorage.getItem(YT_KEY));if(d)YT=Object.assign(YT,d)}catch(e){}}
 function saveYT(){try{localStorage.setItem(YT_KEY,JSON.stringify(YT))}catch(e){}}
 
@@ -266,22 +299,23 @@ function drawAurora(){
   const canvas=document.getElementById('hero-canvas');
   if(!canvas)return;
   const ctx=canvas.getContext('2d');
+  if(!ctx)return;
   const w=canvas.offsetWidth||360,h=canvas.offsetHeight||200;
   canvas.width=w;canvas.height=h;
   const base=ctx.createLinearGradient(0,0,w,h);
   base.addColorStop(0,'#130524');base.addColorStop(.5,'#0a1535');base.addColorStop(1,'#060d1f');
   ctx.fillStyle=base;ctx.fillRect(0,0,w,h);
-  function blob(x,y,r,hex,a){
+  function blob(x,y,r,rgb,a){
     const g=ctx.createRadialGradient(x,y,0,x,y,r);
-    const hi=Math.round(a*255).toString(16).padStart(2,'0');
-    const lo=Math.round(a*.35*255).toString(16).padStart(2,'0');
-    g.addColorStop(0,hex+hi);g.addColorStop(.6,hex+lo);g.addColorStop(1,hex+'00');
+    g.addColorStop(0,`rgba(${rgb},${a})`);
+    g.addColorStop(.6,`rgba(${rgb},${(a*.35).toFixed(2)})`);
+    g.addColorStop(1,`rgba(${rgb},0)`);
     ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
   }
-  blob(w*.15,h*.25,w*.55,'#7c3aed',.75);
-  blob(w*.88,h*.4,w*.45,'#00c896',.65);
-  blob(w*.5,h*.9,w*.5,'#ec4899',.55);
-  blob(w*.3,h*.6,w*.35,'#3b82f6',.45);
+  blob(w*.15,h*.25,w*.55,'124,58,237',.75);
+  blob(w*.88,h*.4,w*.45,'0,200,150',.65);
+  blob(w*.5,h*.9,w*.5,'236,72,153',.55);
+  blob(w*.3,h*.6,w*.35,'59,130,246',.45);
   const shim=ctx.createLinearGradient(0,0,w,h);
   shim.addColorStop(0,'rgba(255,255,255,.04)');shim.addColorStop(1,'rgba(255,255,255,0)');
   ctx.fillStyle=shim;ctx.fillRect(0,0,w,h);
@@ -333,7 +367,7 @@ function renderHome(){
   const n=new Date();
   const el=document.getElementById('hero-date');
   if(el)el.textContent=n.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
-  drawAurora();
+  try{drawAurora();}catch(e){}
   const doy=Math.floor((n-new Date(n.getFullYear(),0,0))/86400000);
   const affEl=document.getElementById('aff-text');
   if(affEl)affEl.textContent=AFFS[doy%AFFS.length];
@@ -422,8 +456,11 @@ function renderIdeas(){
     return;
   }
   const analysis=analyzeContent(YT.videos);
-  const ideas=generateIdeas(analysis,YT.trending||[],YT.niche);
-  el.innerHTML=buildChannelCard()+buildInsights(analysis)+buildTopVideos(analysis.sorted.slice(0,5))+(YT.trending?.length?buildTrending():'')+buildIdeaCards(ideas);
+  const ideas=YT.ideas?.length?YT.ideas:generateIdeas(analysis,YT.trending||[],YT.niche);
+  const aiMode=!!(YT.geminiKey&&YT.ideas?.length);
+  const chatSection=YT.geminiKey?buildChatSection():''
+  el.innerHTML=buildChannelCard()+buildInsights(analysis)+buildTopVideos(analysis.sorted.slice(0,5))+(YT.trending?.length?buildTrending():'')+buildIdeaCards(ideas,aiMode)+chatSection;
+  if(chatOpen)renderChatMsgs(false);
 }
 
 function renderSetupScreen(){
@@ -441,6 +478,11 @@ function renderSetupScreen(){
   </div>
   <form onsubmit="connectChannel(event)">
     <div class="fg"><label class="fl">YouTube API Key</label><input class="fi" id="yt-key" required placeholder="AIzaSy..." value="${esc(YT.apiKey||'')}"></div>
+    <div class="fg">
+      <label class="fl">Gemini API Key <span style="color:var(--acc);font-weight:700">✦ AI Ideas</span></label>
+      <input class="fi" id="gemini-key" placeholder="AIzaSy... (from aistudio.google.com)" value="${esc(YT.geminiKey||'')}">
+      <div style="font-size:11px;color:var(--fg2);margin-top:4px">Free — same Google account. Get it at <b>aistudio.google.com</b> → Get API key</div>
+    </div>
     <div class="fg"><label class="fl">Your Channel @Handle</label>
       <div class="handle-wrap"><span class="handle-pre">@</span><input class="handle-inp" id="yt-handle" required placeholder="yourchannel" value="${esc((YT.handle||'').replace('@',''))}"></div>
     </div>
@@ -492,18 +534,50 @@ function buildTrending(){
     <div class="li-sub">${esc(t.snippet?.channelTitle||'—')}</div></div></div>`).join('')}`;
 }
 
-function buildIdeaCards(ideas){
-  return`<div class="sec-hd">Content Ideas For You (${ideas.length})</div>${ideas.map((item,i)=>`
-    <div class="idea-row">
-      <div class="idea-num">${i+1}</div>
-      <div class="idea-text">${esc(item)}</div>
-      <button class="copy-btn" data-idea="${esc(item)}" onclick="copyIdea(this)" title="Copy">📋</button>
+function buildChatSection(){
+  const msgs=chatHistory.length?`<div class="chat-msgs" id="chat-msgs">${chatHistory.map(m=>{const isUser=m.role==='user';const txt=m.parts[0].text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');return`<div class="msg ${isUser?'msg-user':'msg-ai'}">${isUser?esc(m.parts[0].text):txt}</div>`;}).join('')}</div>`:'';
+  const empty=!chatHistory.length?`<div style="font-size:13px;color:var(--fg2);padding:16px;text-align:center">Ask me anything — "Make idea 3 funnier", "Ideas for Diwali week", "What format works best for my niche?"</div>`:'';
+  return`<div class="chat-wrap" id="chat-box">
+    <div class="chat-hdr">
+      <div class="chat-hdr-ico">✨</div>
+      <div><div class="chat-hdr-txt">AI Content Advisor</div><div class="chat-hdr-sub">Gemini 2.0 · Ask anything about your content</div></div>
+    </div>
+    ${msgs||empty}
+    <div id="chat-msgs" style="${chatHistory.length?'display:none':''}"></div>
+    <div class="chat-input-row">
+      <textarea class="chat-inp" id="chat-inp" placeholder="e.g. Can you make idea 5 more trending?" rows="1" onkeydown="handleChatKey(event)"></textarea>
+      <button class="chat-send" onclick="sendChat()"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </div>
+  </div>`;
+}
+
+function buildIdeaCards(ideas,aiMode){
+  const badge=aiMode?`<div class="ai-badge">✦ Gemini AI · Generated from today's trends</div>`:'';
+  return`<div class="sec-hd">Content Ideas For You — tap any to see brief (${ideas.length})</div>${badge}${ideas.map((idea,i)=>`
+    <div class="idea-row" onclick="toggleIdea(${i})">
+      <div class="idea-top">
+        <div class="idea-num">${i+1}</div>
+        <div class="idea-text">${esc(idea.title)}</div>
+        <span class="idea-chev" id="chev-${i}">▾</span>
+      </div>
+      <div class="idea-brief" id="brief-${i}">
+        <div class="brief-row"><div class="brief-lbl">🎬 Opening Hook</div><div class="brief-val">${esc(idea.hook)}</div></div>
+        <div class="brief-row"><div class="brief-lbl">📋 What to Cover</div><div class="brief-val"><ul>${idea.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div></div>
+        <div class="brief-row"><div class="brief-lbl">🖼️ Thumbnail Idea</div><div class="brief-val">${esc(idea.thumb)}</div></div>
+        <div class="brief-row"><div class="brief-lbl">📢 End CTA</div><div class="brief-val">${esc(idea.cta)}</div></div>
+        <button class="copy-btn" onclick="event.stopPropagation();copyIdea(this,'${esc(idea.title)}')">📋 Copy Title</button>
+      </div>
     </div>`).join('')}`;
 }
 
-function copyIdea(btn){
-  const text=btn.dataset.idea;
-  const done=()=>{btn.textContent='✅';setTimeout(()=>btn.textContent='📋',2000)};
+function toggleIdea(i){
+  const b=document.getElementById('brief-'+i);
+  const c=document.getElementById('chev-'+i);
+  b.classList.toggle('open');c.classList.toggle('open');
+}
+
+function copyIdea(btn,text){
+  const done=()=>{btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent='📋 Copy Title',2000)};
   navigator.clipboard.writeText(text).then(done).catch(done);
 }
 
@@ -524,9 +598,11 @@ async function connectChannel(e){
   btn.textContent='Connecting...';btn.disabled=true;
   errEl.style.display='none';
   YT.apiKey=v('yt-key').trim();
+  YT.geminiKey=(document.getElementById('gemini-key')?.value||'').trim();
   YT.handle='@'+(v('yt-handle').replace('@','').trim());
   YT.niche=v('yt-niche');
-  YT.videos=[];YT.trending=[];YT.channelId='';
+  YT.videos=[];YT.trending=[];YT.ideas=[];YT.channelId='';
+  chatHistory=[];
   try{
     const ch=await ytFetch('channels',{part:'snippet,statistics,contentDetails',forHandle:YT.handle});
     if(!ch.items?.length)throw new Error(`Channel "${YT.handle}" not found. Double-check the handle.`);
@@ -565,6 +641,14 @@ async function doRefresh(){
       YT.trending=(tr.items||[]).filter(i=>i.snippet?.channelId!==YT.channelId).slice(0,5);
     }catch(e){YT.trending=[];}
     YT.lastRefresh=new Date().toISOString();
+    // Generate ideas — Gemini AI if key present, else dynamic templates
+    const analysis=analyzeContent(YT.videos);
+    if(YT.geminiKey){
+      try{YT.ideas=await geminiGenerateIdeas(analysis,YT.trending,YT.niche);}
+      catch(e){YT.ideas=generateIdeas(analysis,YT.trending,YT.niche);}
+    }else{
+      YT.ideas=generateIdeas(analysis,YT.trending,YT.niche);
+    }
     saveYT();
     renderIdeas();
   }catch(err){
@@ -572,7 +656,73 @@ async function doRefresh(){
   }finally{if(rb)rb.textContent='↻ Refresh';}
 }
 
-function resetYT(){YT.channelId='';YT.videos=[];YT.trending=[];saveYT();renderIdeas();}
+function resetYT(){YT.channelId='';YT.videos=[];YT.trending=[];YT.ideas=[];chatHistory=[];saveYT();renderIdeas();}
+
+// ── GEMINI AI ─────────────────────────────────────────
+async function geminiCall(userMsg,systemCtx){
+  const model='gemini-2.0-flash';
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${YT.geminiKey}`;
+  const contents=[{role:'user',parts:[{text:systemCtx}]},...chatHistory,{role:'user',parts:[{text:userMsg}]}];
+  const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents,generationConfig:{temperature:0.9,maxOutputTokens:2048}})});
+  const j=await r.json();
+  if(!r.ok)throw new Error(j.error?.message||'Gemini API error. Check your key.');
+  return j.candidates[0].content.parts[0].text;
+}
+
+async function geminiGenerateIdeas(analysis,trending,niche){
+  const{top}=analysis;
+  const top5=top.slice(0,5).map(v=>`"${v.title}" — ${fmtNum(v.views)} views`).join('\n');
+  const trendTitles=(trending||[]).slice(0,8).map(t=>`"${t.snippet?.title||''}"`).filter(t=>t.length>4).join('\n')||'Not available';
+  const prompt=`You are a top YouTube content strategist for ${niche} creators.\n\nChannel: ${YT.channelName} | ${fmtNum(YT.subs)} subscribers | Niche: ${niche}\n\nTheir TOP performing videos:\n${top5}\n\nTODAY's trending ${niche} content on YouTube:\n${trendTitles}\n\nGenerate the BEST 5 video ideas for this creator — quality over quantity. Each idea must:\n- Be inspired by what's trending TODAY (use those actual topics)\n- Match this creator's proven content style\n- Be specific, creative, and immediately actionable — not generic\n- Feel like it was written by a strategist who studied this exact channel\n\nReturn ONLY a valid JSON array of exactly 5 objects, each with EXACTLY these keys:\n{"title":"...","hook":"...","points":["...","...","..."],"thumb":"...","cta":"..."}\n\nNo markdown. No explanation. Start with [ end with ].`;
+  const text=await geminiCall(prompt,'');
+  const match=text.match(/\[[\s\S]*\]/);
+  if(!match)throw new Error('Gemini returned unexpected format. Try refreshing.');
+  return JSON.parse(match[0]);
+}
+
+function buildChatContext(){
+  const ideaTitles=(YT.ideas||[]).map((id,i)=>`${i+1}. ${id.title}`).join('\n');
+  const top5=(YT.videos||[]).slice(0,5).map(v=>`"${v.title}" (${fmtNum(v.views)} views)`).join('\n');
+  return`You are an expert YouTube content advisor for ${YT.channelName}, a ${YT.niche} creator with ${fmtNum(YT.subs)} subscribers.\n\nTheir top videos:\n${top5}\n\nCurrent ideas on screen:\n${ideaTitles}\n\nAnswer the creator's question about their content. Be specific, practical, and encouraging. If they ask to modify an idea, rewrite it better. Keep replies concise (under 150 words). Use plain text — no bullet symbols or markdown.`;
+}
+
+function openChat(){
+  chatOpen=true;renderIdeas();
+  setTimeout(()=>{const el=document.getElementById('chat-msgs');if(el)el.scrollTop=el.scrollHeight;},50);
+}
+
+function closeChat(){chatOpen=false;renderIdeas();}
+
+async function sendChat(){
+  const inp=document.getElementById('chat-inp');
+  if(!inp)return;
+  const msg=inp.value.trim();
+  if(!msg)return;
+  inp.value='';
+  chatHistory.push({role:'user',parts:[{text:msg}]});
+  renderChatMsgs(true);
+  try{
+    const reply=await geminiCall(msg,buildChatContext());
+    chatHistory.push({role:'model',parts:[{text:reply}]});
+    renderChatMsgs(false);
+  }catch(e){
+    chatHistory.push({role:'model',parts:[{text:'Sorry, something went wrong: '+e.message}]});
+    renderChatMsgs(false);
+  }
+}
+
+function renderChatMsgs(typing){
+  const el=document.getElementById('chat-msgs');
+  if(!el)return;
+  el.innerHTML=chatHistory.map(m=>{
+    const isUser=m.role==='user';
+    const txt=m.parts[0].text.replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+    return`<div class="msg ${isUser?'msg-user':'msg-ai'}">${isUser?esc(m.parts[0].text):txt}</div>`;
+  }).join('')+(typing?`<div class="msg msg-ai"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>`:'');
+  el.scrollTop=el.scrollHeight;
+}
+
+function handleChatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();}}
 
 // ── CONTENT ANALYSIS ──────────────────────────────────
 function analyzeContent(videos){
@@ -605,61 +755,78 @@ function analyzeContent(videos){
 }
 
 // ── IDEA GENERATION ───────────────────────────────────
-function generateIdeas(analysis,trending,niche){
-  const{topKeywords,patterns}=analysis;
-  const kw=topKeywords[0]||niche,kw2=topKeywords[1]||niche,kw3=topKeywords[2]||niche;
-  const trendTitles=trending.map(t=>t.snippet?.title||'').filter(Boolean);
-  const tt=trendTitles[0]?extractTopic(trendTitles[0]):niche;
-  const tt2=trendTitles[1]?extractTopic(trendTitles[1]):kw2;
-  const bank={
-    numbered:[
-      `5 ${kw} products I actually repurchase every month`,
-      `10 honest things nobody tells you about ${kw}`,
-      `7 ${kw} mistakes you're probably making right now`,
-      `3 ${niche} habits that completely changed my routine`,
-      `5 underrated ${kw2} tips that actually work`,
-    ],
-    howto:[
-      `How I built my ${niche} routine from scratch`,
-      `How to start with ${kw} when you have no budget`,
-      `The complete ${kw} guide I wish I had when I started`,
-      `How I went from zero to confident with ${kw}`,
-    ],
-    personal:[
-      `I tried ${tt} for 30 days — completely honest results`,
-      `Spending one week using only ${kw} — what happened`,
-      `My honest ${kw} journey after 6 months`,
-      `I documented my ${kw} experiment so you don't have to`,
-    ],
-    review:[
-      `Honest review: is ${tt} actually worth it in 2025?`,
-      `The truth about ${kw} no ${niche} creator talks about`,
-      `I tested the most hyped ${kw} — real verdict after 30 days`,
-      `${kw2} review: what they don't show in ads`,
-    ],
-    comparison:[
-      `Expensive vs affordable ${kw} — is there a real difference?`,
-      `${tt} vs ${tt2} — which is actually better?`,
-      `I compared the top 3 ${kw} brands so you don't have to`,
-      `Drugstore vs high-end ${kw}: brutally honest test`,
-    ],
-    challenge:[
-      `I did the ${kw} challenge for 30 days straight`,
-      `What happens when you quit ${kw} for a full month`,
-      `I followed a viral ${niche} routine for 2 weeks`,
-      `Using only ${tt} for a full week — results surprised me`,
-    ],
-  };
-  const ideas=[];
-  Object.entries(patterns).sort((a,b)=>b[1].count-a[1].count).forEach(([p])=>{if(bank[p])bank[p].forEach(idea=>ideas.push(idea))});
-  // Capitalise first letter
-  return [...new Set(ideas)].slice(0,12).map(s=>s.charAt(0).toUpperCase()+s.slice(1));
-}
+// Format templates — functions that take a topic and return a full idea brief
+const FMT={
+  personal:[
+    t=>({title:`I tried ${t} for 30 days — honest results`,hook:`I spent a full month testing ${t} and I'm giving you the complete unfiltered truth.`,points:[`Week 1: first impressions and what surprised you immediately`,`Week 2–3: where real changes appeared vs where nothing happened`,`Day 30: final verdict — who should try this and who should skip it`],thumb:`Day 1 vs Day 30 side by side. Same lighting. Real result.`,cta:`Drop your questions about ${t} below — I'll reply to each one`}),
+    t=>({title:`What happened when I quit ${t} for a month`,hook:`I removed ${t} completely for 30 days. The results were not what I expected.`,points:[`Why you decided to quit and what you hoped to find out`,`Week 2: the adjustment — what you missed and what you surprisingly didn't`,`The result: what came back, what stayed gone, and your real recommendation`],thumb:`Before and after. Honest face. "30 days later" text.`,cta:`Would you do this? Vote in the poll`}),
+    t=>({title:`I tested ${t} so you don't have to waste your money`,hook:`I spent the money and the time so you can make a smarter decision.`,points:[`What the internet claims about ${t} vs what you actually found`,`The test: exactly how you tried it and for how long`,`Final verdict: is it worth the price? The honest number`],thumb:`Product/topic with price tag. Your honest expression.`,cta:`Tell me what you want me to test next`}),
+  ],
+  howto:[
+    t=>({title:`How to actually start with ${t} — beginner guide`,hook:`Every ${t} guide assumes you already know things. This one starts from zero.`,points:[`Why most beginner guides fail people — what gap this fills`,`The actual starting point: what to do on day 1, week 1`,`The one thing that matters more than everything else combined`],thumb:`Step 1 → Step 2 → Step 3 visual. Clean, beginner-friendly.`,cta:`Comment "beginner" and I'll reply with your exact first step`}),
+    t=>({title:`The ${t} guide I wish I had when I started`,hook:`I learned ${t} the slow, painful, expensive way. This is what I wish existed.`,points:[`The biggest beginner mistake with ${t} and why it's so common`,`The shortcut I discovered after months that changes everything`,`Your actual current approach and what genuinely works`],thumb:`Old confused photo vs now confident. Same person, different knowledge.`,cta:`What took you the longest to figure out about ${t}?`}),
+  ],
+  review:[
+    t=>({title:`Honest review: Is ${t} actually worth it in 2025?`,hook:`I'm giving you the review I couldn't find when I was researching ${t}.`,points:[`What the positive reviews get right about ${t}`,`What the positive reviews quietly leave out — the real limitations`,`Who it's worth it for and who should save their money`],thumb:`"Worth it?" text. Your real verdict face. Product/topic visible.`,cta:`Have you tried ${t}? Tell me your experience below`}),
+    t=>({title:`The truth about ${t} nobody is talking about`,hook:`Everyone is talking about ${t}. Nobody is talking about this part of it.`,points:[`The popular narrative: what most creators say`,`What you actually found after real extended use`,`The honest conclusion everyone deserves to hear before trying it`],thumb:`"The truth" text. Direct, confident expression.`,cta:`Did this change how you think about ${t}?`}),
+    t=>({title:`I used ${t} every day for 2 weeks — real results`,hook:`Not a first impression. Not a 3-day test. Two full weeks of daily use.`,points:[`Days 1–3: what stood out immediately, good and bad`,`Week 2: what changed after consistent use vs first impressions`,`Final result: exactly what changed and what didn't — real numbers`],thumb:`Day 1 vs Day 14. Same conditions. Honest result.`,cta:`What result would make ${t} worth it for you?`}),
+  ],
+  comparison:[
+    (t,t2)=>({title:`${t} vs ${t2} — which is actually better?`,hook:`I used both. I'm giving you the honest answer so you don't have to guess.`,points:[`Quality comparison: what the actual difference is between them`,`Value comparison: when the price or effort gap is justified`,`Final verdict: who should pick which and exactly why`],thumb:`Side by side. VS format. Your verdict clearly shown.`,cta:`Which side are you on? Vote in the poll`}),
+    t=>({title:`Budget vs expensive ${t} — honest difference test`,hook:`I bought the cheap version and the expensive version. Tested both for two weeks.`,points:[`Price difference: what you're actually paying extra for`,`Test results: where the gap showed and where it completely didn't`,`The honest recommendation: who should spend more, who should save`],thumb:`Price tags visible. Two versions side by side. Split test.`,cta:`What price would make expensive ${t} worth it to you?`}),
+  ],
+  numbered:[
+    t=>({title:`5 things I wish I knew about ${t} before starting`,hook:`I learned these the hard way so you don't have to.`,points:[`Things 1 & 2: foundational mistakes that cost most people time or money`,`Things 3 & 4: non-obvious insights that change your entire approach`,`Thing 5: the one that surprised you most`],thumb:`Big "5" text. Helpful energy, not clickbait.`,cta:`Which one hit the hardest? Comment the number`}),
+    t=>({title:`7 ${t} mistakes you're probably making right now`,hook:`These aren't obvious — that's exactly why everyone keeps making them.`,points:[`Mistakes 1–3: what most people do wrong in the first month`,`Mistakes 4–5: the ones that show up after you think you know what you're doing`,`Mistakes 6–7: the subtle ones that separate good from great results`],thumb:`"7 mistakes" text. One relatable example visible.`,cta:`Which mistake were you making? Honest answer below`}),
+    t=>({title:`3 ${t} habits that completely changed my results`,hook:`I tried 20 different approaches. Only 3 actually stuck and made a real difference.`,points:[`Habit 1: the smallest change that had the biggest impact`,`Habit 2: the one you expected nothing from — surprised you most`,`Habit 3: hardest to start but now the most valuable one`],thumb:`3 checkboxes ticking. Clean, satisfying visual.`,cta:`Which habit will you try first?`}),
+  ],
+  challenge:[
+    t=>({title:`I did ${t} every day for 30 days — what happened`,hook:`30 days. No skipping. Every single day. Here's the honest result.`,points:[`The rules: exactly what you committed to every day`,`Week 2: when it got hard — what almost made you quit`,`Day 30: what changed physically, mentally, and your real verdict`],thumb:`Day 1 vs Day 30. Calendar crossed to day 30. Honest change.`,cta:`Could you do this for 30 days? Comment or give your excuse`}),
+    t=>({title:`Using only ${t} for a full week — results`,hook:`7 days. No alternatives, no exceptions. Here's what I found.`,points:[`Days 1–2: the adjustment — what you had to figure out fast`,`Days 4–5: where the challenge got real`,`Day 7: the verdict and whether you'd ever choose this permanently`],thumb:`One thing. 7-day calendar. Simple, clean visual.`,cta:`Would you try this for a week?`}),
+  ],
+};
+
 
 function extractTopic(title){
-  const stop=new Set(['this','that','with','from','have','what','when','were','they','your','their','about','into','been','some','would','could','which','just','very','really','actually','literally','honest']);
-  const words=title.replace(/[^\w\s]/g,' ').split(/\s+/).filter(w=>w.length>3&&!stop.has(w.toLowerCase()));
-  return words.slice(0,3).join(' ').toLowerCase()||title.split(' ').slice(0,2).join(' ').toLowerCase();
+  const noise=new Set(['how','to','my','the','a','an','and','or','but','for','of','with','is','was','are','be','have','you','your','this','that','these','those','i','me','we','us','they','them','video','part','episode','feat','full','new','best','top','which','when','where','what','why','did','do','does','very','just','only','also','even','still','yet','never','always','every','each','all','both','more','most','other','some','such','than','then','though','through','until','while','really','actually','literally','seriously','about','after','into','onto','from','over','under','again','further','once','here','there','our','its','it','she','her','his','him','their','vs']);
+  return title.replace(/[^\w\s]/g,' ').split(/\s+/).filter(w=>w.length>2&&!noise.has(w.toLowerCase())&&isNaN(w)).slice(0,4).join(' ').toLowerCase()||title.split(' ').slice(0,3).join(' ').toLowerCase();
+}
+
+function generateIdeas(analysis,trending,niche){
+  const{patterns,topKeywords,top}=analysis;
+
+  // Rank formats by what performed best on THIS channel
+  const rankedFormats=Object.entries(patterns).sort((a,b)=>b[1].count-a[1].count).map(e=>e[0]).filter(f=>FMT[f]);
+  const activeFormats=rankedFormats.length>0?rankedFormats:Object.keys(FMT);
+
+  // Topics from TODAY's trending videos (live from YouTube API)
+  const trendTopics=(trending||[]).map(t=>extractTopic(t.snippet?.title||'')).filter(t=>t.length>4).slice(0,7);
+
+  // Topics from their own top-performing videos
+  const channelTopics=top.slice(0,6).map(v=>extractTopic(v.title)).filter(t=>t.length>4);
+
+  // Their raw top keywords as topics too
+  const kwTopics=topKeywords.slice(0,4);
+
+  // Merge: trending first (most current), then channel, then keywords
+  const allTopics=[...new Set([...trendTopics,...channelTopics,...kwTopics])].filter(Boolean);
+
+  // Fallback if no topics at all
+  if(!allTopics.length)allTopics.push(niche.toLowerCase());
+
+  const ideas=[];const seen=new Set();
+  allTopics.forEach((topic,i)=>{
+    if(ideas.length>=12)return;
+    // Cycle through ranked formats so user's best-performing style comes first
+    const fmt=activeFormats[i%activeFormats.length];
+    const templates=FMT[fmt]||FMT.personal;
+    const fn=templates[i%templates.length];
+    // For comparison format pass a second topic
+    const topic2=allTopics[(i+Math.ceil(allTopics.length/2))%allTopics.length]||niche;
+    const idea=fn(topic,topic2);
+    if(!seen.has(idea.title)){seen.add(idea.title);ideas.push(idea);}
+  });
+  return ideas.slice(0,5);
 }
 
 // ── MODAL ─────────────────────────────────────────────

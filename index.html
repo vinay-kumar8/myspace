@@ -1,0 +1,725 @@
+<title>MySpace</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00C896">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MySpace">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap">
+
+<style>
+:root {
+  --bg:#F2F4F9;--surface:#fff;--card:#fff;
+  --border:rgba(0,0,0,.07);--fg:#0F1220;--fg2:#6B7280;
+  --acc:#00C896;--acc-dim:rgba(0,200,150,.13);
+  --ok:#10B981;--warn:#F59E0B;--err:#EF4444;
+  --nav:64px;--r:16px;
+  --sh:0 1px 3px rgba(0,0,0,.07),0 6px 16px rgba(0,0,0,.06);
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#090C16;--surface:#111525;--card:#181C2E;
+    --border:rgba(255,255,255,.06);--fg:#E8EAF2;
+    --sh:0 1px 3px rgba(0,0,0,.35),0 6px 16px rgba(0,0,0,.3);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#090C16;--surface:#111525;--card:#181C2E;
+  --border:rgba(255,255,255,.06);--fg:#E8EAF2;
+  --sh:0 1px 3px rgba(0,0,0,.35),0 6px 16px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+#app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto}
+.tab{display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 20px)}
+.tab.active{display:block}
+.tab-hdr{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:13px max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;justify-content:space-between;z-index:5;border-bottom:1px solid var(--border)}
+.tab-hdr h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+#bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:calc(var(--nav) + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:flex-start;padding-top:8px;padding-left:max(0px,env(safe-area-inset-left,0px));padding-right:max(0px,env(safe-area-inset-right,0px));z-index:100}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;color:var(--fg2);padding:0;transition:color .15s;font-family:'Inter',sans-serif}
+.nb.on{color:var(--acc)}
+.nb svg{width:20px;height:20px;stroke-width:1.8;fill:none;stroke:currentColor}
+.nb span{font-size:9px;font-weight:600;letter-spacing:.02em}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+/* HERO */
+.hero-wrap{padding:14px max(16px,env(safe-area-inset-left,0px)) 0;padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hero-card{position:relative;border-radius:22px;overflow:hidden;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-content{position:relative;z-index:2;padding:20px 20px 16px;background:linear-gradient(to top,rgba(0,0,0,.55) 0%,rgba(0,0,0,.1) 70%,transparent 100%)}
+.hero-date{font-size:12px;color:rgba(255,255,255,.7);font-weight:500;margin-bottom:4px;letter-spacing:.04em}
+.hero-name{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:#fff;line-height:1.1}
+.hero-name em{font-style:normal;color:#7DF8C9}
+/* AFFIRMATION */
+.aff-card{position:relative;margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh);display:flex;align-items:flex-start;gap:12px}
+.aff-sparkle{font-size:22px;flex-shrink:0;margin-top:1px}
+.aff-text{font-size:14px;line-height:1.55;color:var(--fg);font-style:italic}
+.aff-label{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--acc);margin-bottom:5px}
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;border-radius:3px 0 0 3px}
+.stat.s-income::before{background:var(--acc)}.stat.s-tasks::before{background:var(--warn)}.stat.s-returns::before{background:var(--err)}.stat.s-spend::before{background:#818CF8}
+.stat-l{font-size:10.5px;font-weight:600;color:var(--fg2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+.stat-v{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.01em;color:var(--fg)}
+.c-acc{color:var(--acc)}.c-warn{color:var(--warn)}.c-err{color:var(--err)}.c-indigo{color:#818CF8}
+/* LIST */
+.li{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:10px;box-shadow:var(--sh);display:flex;align-items:flex-start;gap:12px}
+.li-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.li-body{flex:1;min-width:0}
+.li-title{font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-sub{font-size:12px;color:var(--fg2);margin-top:2px}
+.li-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.li-amt{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+.bdg{display:inline-block;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:600}
+.bdg-ok{background:rgba(16,185,129,.12);color:var(--ok)}.bdg-warn{background:rgba(245,158,11,.12);color:var(--warn)}.bdg-acc{background:rgba(0,200,150,.12);color:var(--acc)}.bdg-mute{background:rgba(107,114,128,.13);color:var(--fg2)}.bdg-err{background:rgba(239,68,68,.12);color:var(--err)}
+.btn-add{background:var(--acc);color:#000;border:none;border-radius:10px;padding:8px 15px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-add:active{opacity:.8}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--err);font-size:16px;line-height:1;padding:2px;opacity:.6}
+.del-btn:active{opacity:1}
+.sum-bar{background:var(--acc-dim);border:1px solid rgba(0,200,150,.25);border-radius:var(--r);padding:12px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center}
+.sum-bar .lbl{font-size:11.5px;color:var(--fg2);margin-bottom:2px}
+.sum-bar .val{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;letter-spacing:-0.01em;color:var(--acc)}
+.sum-bar .val.warn{color:var(--warn)}
+.empty{text-align:center;padding:52px 24px;color:var(--fg2)}
+.empty .em-ico{font-size:48px;margin-bottom:14px}
+.empty h3{font-family:'Syne',sans-serif;font-size:18px;color:var(--fg);margin-bottom:6px;font-weight:700}
+.empty p{font-size:14px;line-height:1.6}
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.sheet{background:var(--surface);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:20px max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateY(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto}
+.overlay.open .sheet{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px}
+.sheet-title{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;margin-bottom:18px}
+/* FORM */
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:600;color:var(--fg2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.fi,.fs{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:11px 13px;font-size:15px;color:var(--fg);font-family:'Inter',sans-serif;outline:none;transition:border-color .15s;appearance:auto}
+.fi:focus,.fs:focus{border-color:var(--acc)}
+.frow{display:flex;gap:12px}.frow .fg{flex:1;min-width:0}
+.btn-save{width:100%;background:var(--acc);color:#000;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;font-family:'Syne',sans-serif;cursor:pointer;margin-top:6px}
+.btn-save:active{opacity:.8}
+.sec-hd{font-size:11.5px;font-weight:700;color:var(--fg2);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 10px}
+.days-big{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.days-lbl{font-size:10px;color:var(--fg2);font-weight:500}
+.hint-row{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:12px;color:var(--fg2)}
+.hint-row input{width:64px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:6px 8px;color:var(--fg);font-size:13px;outline:none;font-family:'Inter',sans-serif}
+.hint-row input:focus{border-color:var(--acc)}
+.hint-row button{background:var(--acc-dim);border:none;border-radius:8px;padding:6px 12px;font-size:12px;color:var(--acc);cursor:pointer;font-weight:600;font-family:'Inter',sans-serif}
+/* IDEAS-specific */
+.yt-setup-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:16px}
+.yt-steps{font-size:12px;background:var(--acc-dim);border:1px solid rgba(0,200,150,.3);border-radius:10px;padding:12px 14px;line-height:1.8;margin-bottom:16px}
+.yt-steps strong{color:var(--acc)}
+.ch-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--sh);margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.insight-pill{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--sh);font-size:13px;line-height:1.55;color:var(--fg2)}
+.insight-pill b{color:var(--fg)}
+.idea-row{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh);display:flex;align-items:center;gap:12px}
+.idea-num{width:28px;height:28px;border-radius:8px;background:var(--acc-dim);display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Syne',sans-serif;font-weight:700;color:var(--acc);flex-shrink:0}
+.idea-text{flex:1;min-width:0;font-size:14px;line-height:1.5;color:var(--fg)}
+.copy-btn{background:none;border:none;cursor:pointer;font-size:18px;padding:4px;flex-shrink:0;opacity:.7;transition:opacity .15s}
+.copy-btn:active{opacity:1}
+.handle-wrap{display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .15s}
+.handle-wrap:focus-within{border-color:var(--acc)}
+.handle-pre{padding:0 4px 0 13px;color:var(--fg2);font-size:15px}
+.handle-inp{flex:1;background:none;border:none;padding:11px 13px 11px 0;font-size:15px;color:var(--fg);font-family:'Inter',sans-serif;outline:none}
+.yt-err{display:none;color:var(--err);font-size:13px;text-align:center;padding:6px;margin-top:4px;border-radius:8px;background:rgba(239,68,68,.08)}
+.refresh-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;font-size:12px;color:var(--fg2);cursor:pointer;font-family:'Inter',sans-serif;font-weight:600}
+.refresh-btn:active{opacity:.7}
+</style>
+
+<div id="app">
+  <!-- HOME -->
+  <div class="tab active" id="tab-home">
+    <div class="tab-hdr"><h1>MySpace</h1></div>
+    <div class="hero-wrap">
+      <div class="hero-card">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+          <div class="hero-date" id="hero-date"></div>
+          <div class="hero-name">Hello, <em>Creator</em> 👋</div>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="aff-card">
+        <div class="aff-sparkle">✨</div>
+        <div><div class="aff-label">Daily Affirmation</div><div class="aff-text" id="aff-text"></div></div>
+      </div>
+      <div class="stat-grid" id="home-stats"></div>
+    </div>
+  </div>
+
+  <!-- INCOME -->
+  <div class="tab" id="tab-income">
+    <div class="tab-hdr"><h1>Income</h1><button class="btn-add" onclick="openIncomeForm()">+ Add Collab</button></div>
+    <div class="wrap" style="padding-top:14px"><div id="income-sum"></div><div id="income-list"></div></div>
+  </div>
+
+  <!-- DELIVERABLES -->
+  <div class="tab" id="tab-deliverables">
+    <div class="tab-hdr"><h1>Deliverables</h1><button class="btn-add" onclick="openDelivForm()">+ Add</button></div>
+    <div class="wrap" style="padding-top:14px"><div id="deliv-list"></div></div>
+  </div>
+
+  <!-- RETURNS -->
+  <div class="tab" id="tab-returns">
+    <div class="tab-hdr"><h1>Returns</h1><button class="btn-add" onclick="openReturnForm()">+ Add Order</button></div>
+    <div class="wrap" style="padding-top:14px"><div id="returns-list"></div></div>
+  </div>
+
+  <!-- SPENDING -->
+  <div class="tab" id="tab-spending">
+    <div class="tab-hdr"><h1>Spending</h1><button class="btn-add" onclick="openSpendForm()">+ Add</button></div>
+    <div class="wrap" style="padding-top:14px"><div id="spend-sum"></div><div id="spend-list"></div></div>
+  </div>
+
+  <!-- IDEAS -->
+  <div class="tab" id="tab-ideas">
+    <div class="tab-hdr">
+      <h1>Content Ideas</h1>
+      <button class="refresh-btn" id="yt-refresh-btn" onclick="doRefresh()" style="display:none">↻ Refresh</button>
+    </div>
+    <div class="wrap" style="padding-top:14px" id="ideas-content"></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav id="bnav">
+    <button class="nb on" onclick="showTab('home')" id="nb-home">
+      <svg viewBox="0 0 24 24"><path d="M3 12L12 3l9 9"/><path d="M9 21V12h6v9"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nb" onclick="showTab('income')" id="nb-income">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5C9.5 8.1 10.6 7 12 7s2.5 1.1 2.5 2.5c0 2.5-5 2.5-5 5C9.5 15.9 10.6 17 12 17s2.5-1.1 2.5-2.5"/></svg>
+      <span>Income</span>
+    </button>
+    <button class="nb" onclick="showTab('deliverables')" id="nb-deliverables">
+      <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="4" rx="1"/><rect x="4" y="4" width="16" height="17" rx="2"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Tasks</span>
+    </button>
+    <button class="nb" onclick="showTab('returns')" id="nb-returns">
+      <svg viewBox="0 0 24 24"><path d="M5 8h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2v-8a2 2 0 012-2z"/><path d="M16 8V6a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      <span>Returns</span>
+    </button>
+    <button class="nb" onclick="showTab('spending')" id="nb-spending">
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      <span>Spending</span>
+    </button>
+    <button class="nb" onclick="showTab('ideas')" id="nb-ideas">
+      <svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 017 7c0 2.4-1.2 4.5-3 5.7V17a1 1 0 01-1 1H9a1 1 0 01-1-1v-2.3C6.2 13.5 5 11.4 5 9a7 7 0 017-7z"/><path d="M9 21h6"/><path d="M10 17h4"/></svg>
+      <span>Ideas</span>
+    </button>
+  </nav>
+</div>
+
+<div class="overlay" id="modal" onclick="closeModalOnBg(event)">
+  <div class="sheet"><div class="sheet-handle"></div><div id="modal-body"></div></div>
+</div>
+
+<script>
+// ── TRACKER DATA ──────────────────────────────────────
+const KEY='myspace_v1';
+let S={income:[],deliverables:[],returns:[],spending:[]};
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(d)S=Object.assign(S,d)}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function v(id){return(document.getElementById(id)||{}).value||''}
+function today(){return new Date().toISOString().split('T')[0]}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+// ── YOUTUBE DATA ──────────────────────────────────────
+const YT_KEY='myspace_yt';
+let YT={apiKey:'',handle:'',niche:'',channelId:'',uploadsId:'',channelName:'',subs:0,videos:[],trending:[],lastRefresh:''};
+function loadYT(){try{const d=JSON.parse(localStorage.getItem(YT_KEY));if(d)YT=Object.assign(YT,d)}catch(e){}}
+function saveYT(){try{localStorage.setItem(YT_KEY,JSON.stringify(YT))}catch(e){}}
+
+// ── AFFIRMATIONS ──────────────────────────────────────
+const AFFS=[
+  "Your content is inspiring someone right now. Keep going.",
+  "Consistency beats perfection. Show up today.",
+  "Every view is a real person you touched. That matters.",
+  "You are building your dream, one post at a time.",
+  "Rest is productive. Your best ideas bloom after rest.",
+  "Your authenticity is your greatest competitive advantage.",
+  "The numbers don't define your worth. Your impact does.",
+  "Today's effort plants tomorrow's harvest. Keep sowing.",
+  "You are a creative force. Trust your unique voice.",
+  "Growth is happening even when you can't see it.",
+  "Your story matters. Never stop sharing it.",
+  "Brand deals come to creators who show up consistently.",
+  "One great piece of content can change everything.",
+  "You don't need a million followers to make a difference.",
+  "Create with joy. The energy you put in always shows.",
+  "You have already inspired more people than you know.",
+  "Every great creator started exactly where you are now.",
+  "Your niche is your power. Go deeper, not wider."
+];
+
+// ── AURORA CANVAS ─────────────────────────────────────
+function drawAurora(){
+  const canvas=document.getElementById('hero-canvas');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  const w=canvas.offsetWidth||360,h=canvas.offsetHeight||200;
+  canvas.width=w;canvas.height=h;
+  const base=ctx.createLinearGradient(0,0,w,h);
+  base.addColorStop(0,'#130524');base.addColorStop(.5,'#0a1535');base.addColorStop(1,'#060d1f');
+  ctx.fillStyle=base;ctx.fillRect(0,0,w,h);
+  function blob(x,y,r,hex,a){
+    const g=ctx.createRadialGradient(x,y,0,x,y,r);
+    const hi=Math.round(a*255).toString(16).padStart(2,'0');
+    const lo=Math.round(a*.35*255).toString(16).padStart(2,'0');
+    g.addColorStop(0,hex+hi);g.addColorStop(.6,hex+lo);g.addColorStop(1,hex+'00');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  }
+  blob(w*.15,h*.25,w*.55,'#7c3aed',.75);
+  blob(w*.88,h*.4,w*.45,'#00c896',.65);
+  blob(w*.5,h*.9,w*.5,'#ec4899',.55);
+  blob(w*.3,h*.6,w*.35,'#3b82f6',.45);
+  const shim=ctx.createLinearGradient(0,0,w,h);
+  shim.addColorStop(0,'rgba(255,255,255,.04)');shim.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=shim;ctx.fillRect(0,0,w,h);
+  const seed=Math.floor(Date.now()/86400000);
+  function rng(n){let s=seed+n;s=(s^61)^(s>>16);s+=s<<3;s^=s>>4;s*=0x27d4eb2d;s^=s>>15;return(s>>>0)/0xffffffff}
+  for(let i=0;i<55;i++){
+    const x=rng(i*3)*w,y=rng(i*3+1)*h,r=rng(i*3+2)*1.4+.3,a=.4+rng(i*7)*.6;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${a.toFixed(2)})`;ctx.fill();
+  }
+}
+
+// ── FORMAT ────────────────────────────────────────────
+function fmtINR(n){const x=Number(n)||0;if(x>=100000)return'₹'+(x/100000).toFixed(1)+'L';if(x>=1000)return'₹'+(x/1000).toFixed(1)+'K';return'₹'+x.toLocaleString('en-IN')}
+function fmtNum(n){const x=Number(n)||0;if(x>=1000000)return(x/1000000).toFixed(1)+'M';if(x>=1000)return(x/1000).toFixed(1)+'K';return x.toLocaleString('en-IN')}
+function fmtDate(d){if(!d)return'—';return new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}
+function daysLeft(ds){const t=new Date();t.setHours(0,0,0,0);return Math.ceil((new Date(ds+'T00:00:00')-t)/86400000)}
+function isThisMonth(d){const n=new Date(),dd=new Date(d+'T00:00:00');return dd.getMonth()===n.getMonth()&&dd.getFullYear()===n.getFullYear()}
+function timeSince(iso){const s=Math.floor((Date.now()-new Date(iso))/1000);if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
+
+// ── TABS ──────────────────────────────────────────────
+let curTab='home';
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('nb-'+name).classList.add('on');
+  curTab=name;render();
+}
+function render(){
+  if(curTab==='home')renderHome();
+  else if(curTab==='income')renderIncome();
+  else if(curTab==='deliverables')renderDelivs();
+  else if(curTab==='returns')renderReturns();
+  else if(curTab==='spending')renderSpending();
+  else if(curTab==='ideas')renderIdeas();
+}
+
+// ── HELPERS ───────────────────────────────────────────
+function platEmoji(p){return p==='YouTube'?'🎬':p==='Both'?'🌐':'📸'}
+function platBg(p){return p==='YouTube'?'background:rgba(255,0,0,.1)':p==='Both'?'background:var(--acc-dim)':'background:rgba(225,48,108,.12)'}
+function storeEmoji(s){return{Amazon:'📦',Myntra:'👗',Flipkart:'🛒',Nykaa:'💄',Meesho:'🎁',Ajio:'👔'}[s]||'🏪'}
+function storeBg(s){return{Amazon:'background:rgba(255,153,0,.18)',Myntra:'background:rgba(255,63,63,.15)',Flipkart:'background:rgba(39,131,255,.15)',Nykaa:'background:rgba(252,44,129,.15)'}[s]||'background:var(--acc-dim)'}
+function catEmoji(c){return{Food:'🍽️',Shopping:'🛍️',Transport:'🚗',Entertainment:'🎭',Subscription:'📱'}[c]||'💳'}
+function emptyState(emoji,title,desc){return`<div class="empty"><div class="em-ico">${emoji}</div><h3>${title}</h3><p>${desc}</p></div>`}
+
+// ── RENDER: HOME ──────────────────────────────────────
+function renderHome(){
+  const n=new Date();
+  const el=document.getElementById('hero-date');
+  if(el)el.textContent=n.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
+  drawAurora();
+  const doy=Math.floor((n-new Date(n.getFullYear(),0,0))/86400000);
+  const affEl=document.getElementById('aff-text');
+  if(affEl)affEl.textContent=AFFS[doy%AFFS.length];
+  const earned=S.income.filter(i=>i.status==='Received'&&isThisMonth(i.date)).reduce((s,i)=>s+Number(i.amount),0);
+  const pendD=S.deliverables.filter(d=>d.status!=='Approved'&&d.status!=='Delivered').length;
+  const expR=S.returns.filter(r=>{const dl=daysLeft(r.returnDeadline);return dl>=0&&dl<=3}).length;
+  const spent=S.spending.filter(i=>isThisMonth(i.date)).reduce((s,i)=>s+Number(i.amount),0);
+  document.getElementById('home-stats').innerHTML=`
+    <div class="stat s-income"><div class="stat-l">Income (Month)</div><div class="stat-v c-acc">${fmtINR(earned)}</div></div>
+    <div class="stat s-tasks"><div class="stat-l">Pending Tasks</div><div class="stat-v ${pendD>0?'c-warn':''}">${pendD}</div></div>
+    <div class="stat s-returns"><div class="stat-l">Returns Expiring</div><div class="stat-v ${expR>0?'c-err':''}">${expR}</div></div>
+    <div class="stat s-spend"><div class="stat-l">Spent (Month)</div><div class="stat-v c-indigo">${fmtINR(spent)}</div></div>`;
+}
+
+// ── RENDER: INCOME ────────────────────────────────────
+function renderIncome(){
+  const rec=S.income.filter(i=>i.status==='Received').reduce((s,i)=>s+Number(i.amount),0);
+  const pen=S.income.filter(i=>i.status!=='Received').reduce((s,i)=>s+Number(i.amount),0);
+  document.getElementById('income-sum').innerHTML=S.income.length?`<div class="sum-bar"><div><div class="lbl">Total Received</div><div class="val">${fmtINR(rec)}</div></div><div style="text-align:right"><div class="lbl">In Pipeline</div><div class="val warn">${fmtINR(pen)}</div></div></div>`:'';
+  if(!S.income.length){document.getElementById('income-list').innerHTML=emptyState('💰','No collabs yet','Tap "+ Add Collab" to record your brand deals.');return}
+  const sb={Received:'bdg-ok',Confirmed:'bdg-acc',Negotiating:'bdg-mute',Delivered:'bdg-warn'};
+  document.getElementById('income-list').innerHTML=[...S.income].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(i=>`
+    <div class="li"><div class="li-ico" style="${platBg(i.platform)}">${platEmoji(i.platform)}</div>
+    <div class="li-body"><div class="li-title">${esc(i.brand)}</div><div class="li-sub">${i.platform} · ${fmtDate(i.date)}</div>${i.notes?`<div class="li-sub" style="font-style:italic;margin-top:3px">${esc(i.notes)}</div>`:''}</div>
+    <div class="li-right"><div class="li-amt">${fmtINR(i.amount)}</div><span class="bdg ${sb[i.status]||'bdg-mute'}">${i.status}</span>
+    <button class="del-btn" onclick="del('income','${i.id}')">✕</button></div></div>`).join('');
+}
+
+// ── RENDER: DELIVERABLES ──────────────────────────────
+function renderDelivs(){
+  if(!S.deliverables.length){document.getElementById('deliv-list').innerHTML=emptyState('📋','No deliverables','Tap "+ Add" to track content you owe brands.');return}
+  const sb={Approved:'bdg-ok',Delivered:'bdg-warn','In Progress':'bdg-acc','Not Started':'bdg-mute'};
+  document.getElementById('deliv-list').innerHTML=[...S.deliverables].sort((a,b)=>{
+    if(!a.dueDate)return 1;if(!b.dueDate)return -1;return new Date(a.dueDate)-new Date(b.dueDate);
+  }).map(d=>{
+    const dl=d.dueDate?daysLeft(d.dueDate):null;
+    const dlHtml=dl!==null?`<div class="days-big ${dl<0?'c-err':dl<=2?'c-warn':'c-acc'}" style="font-size:17px">${dl<0?Math.abs(dl)+'d ago':dl===0?'Today':dl+'d'}</div>`:'';
+    return`<div class="li"><div class="li-ico" style="${platBg(d.platform)}">${platEmoji(d.platform)}</div>
+    <div class="li-body"><div class="li-title">${esc(d.title||d.type)}</div><div class="li-sub">${esc(d.brand)} · ${d.type} · ${fmtDate(d.dueDate)}</div></div>
+    <div class="li-right"><span class="bdg ${sb[d.status]||'bdg-mute'}">${d.status}</span>${dlHtml}
+    <button class="del-btn" onclick="del('deliverables','${d.id}')">✕</button></div></div>`;
+  }).join('');
+}
+
+// ── RENDER: RETURNS ───────────────────────────────────
+function renderReturns(){
+  if(!S.returns.length){document.getElementById('returns-list').innerHTML=emptyState('📦','No orders tracked','Tap "+ Add Order" to never miss a return deadline.');return}
+  document.getElementById('returns-list').innerHTML=[...S.returns].sort((a,b)=>new Date(a.returnDeadline)-new Date(b.returnDeadline)).map(r=>{
+    const dl=daysLeft(r.returnDeadline),expired=dl<0;
+    const cc=expired||dl<=1?'c-err':dl<=3?'c-warn':'c-acc';
+    const lbl=expired?`Expired ${Math.abs(dl)}d ago`:dl===0?'Last day!':dl===1?'1 day left':`${dl} days left`;
+    return`<div class="li" style="${expired?'opacity:.5':''}"><div class="li-ico" style="${storeBg(r.store)}">${storeEmoji(r.store)}</div>
+    <div class="li-body"><div class="li-title">${esc(r.product)}</div><div class="li-sub">${r.store}${r.orderId?' · '+esc(r.orderId):''}</div><div class="li-sub">Deadline: ${fmtDate(r.returnDeadline)}</div></div>
+    <div class="li-right"><div class="days-big ${cc}">${expired?'✕':dl}</div><div class="days-lbl">${lbl}</div>
+    <button class="del-btn" onclick="del('returns','${r.id}')">✕</button></div></div>`;
+  }).join('');
+}
+
+// ── RENDER: SPENDING ──────────────────────────────────
+function renderSpending(){
+  const total=S.spending.filter(i=>isThisMonth(i.date)).reduce((s,i)=>s+Number(i.amount),0);
+  document.getElementById('spend-sum').innerHTML=S.spending.length?`<div class="sum-bar"><div><div class="lbl">Spent This Month</div><div class="val" style="color:var(--err)">${fmtINR(total)}</div></div></div>`:'';
+  if(!S.spending.length){document.getElementById('spend-list').innerHTML=emptyState('💸','No expenses yet','Tap "+ Add" to track your spending.');return}
+  document.getElementById('spend-list').innerHTML=[...S.spending].sort((a,b)=>new Date(b.date)-new Date(a.date)).map(i=>`
+    <div class="li"><div class="li-ico" style="background:var(--acc-dim)">${catEmoji(i.category)}</div>
+    <div class="li-body"><div class="li-title">${esc(i.note||i.category)}${i.app?' · '+esc(i.app):''}</div><div class="li-sub">${i.category} · ${fmtDate(i.date)}</div></div>
+    <div class="li-right"><div class="li-amt c-err">${fmtINR(i.amount)}</div>
+    <button class="del-btn" onclick="del('spending','${i.id}')">✕</button></div></div>`).join('');
+}
+
+// ── RENDER: IDEAS ─────────────────────────────────────
+function renderIdeas(){
+  loadYT();
+  const el=document.getElementById('ideas-content');
+  const rb=document.getElementById('yt-refresh-btn');
+  if(!el)return;
+  if(!YT.apiKey||!YT.channelId){
+    if(rb)rb.style.display='none';
+    el.innerHTML=renderSetupScreen();
+    return;
+  }
+  if(rb)rb.style.display='block';
+  if(!YT.videos?.length){
+    el.innerHTML=emptyState('⏳','Fetching your data...','Connecting to your YouTube channel.');
+    doRefresh();
+    return;
+  }
+  const analysis=analyzeContent(YT.videos);
+  const ideas=generateIdeas(analysis,YT.trending||[],YT.niche);
+  el.innerHTML=buildChannelCard()+buildInsights(analysis)+buildTopVideos(analysis.sorted.slice(0,5))+(YT.trending?.length?buildTrending():'')+buildIdeaCards(ideas);
+}
+
+function renderSetupScreen(){
+  return`<div class="yt-setup-box">
+    <div style="font-size:30px;margin-bottom:10px">💡</div>
+    <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:8px">Connect Your YouTube Channel</div>
+    <div style="font-size:13px;color:var(--fg2);line-height:1.65;margin-bottom:16px">Enter your channel @handle and a free YouTube API key. The app analyzes your top videos, finds what works, and generates personalized content ideas.</div>
+    <div class="yt-steps"><strong>Get your free API key (5 min):</strong><br>
+      1. Visit console.cloud.google.com<br>
+      2. New project → Enable "YouTube Data API v3"<br>
+      3. Credentials → Create API Key<br>
+      4. Restrict key to your GitHub Pages domain<br>
+      5. Paste below — it's free (10,000 calls/day)
+    </div>
+  </div>
+  <form onsubmit="connectChannel(event)">
+    <div class="fg"><label class="fl">YouTube API Key</label><input class="fi" id="yt-key" required placeholder="AIzaSy..." value="${esc(YT.apiKey||'')}"></div>
+    <div class="fg"><label class="fl">Your Channel @Handle</label>
+      <div class="handle-wrap"><span class="handle-pre">@</span><input class="handle-inp" id="yt-handle" required placeholder="yourchannel" value="${esc((YT.handle||'').replace('@',''))}"></div>
+    </div>
+    <div class="fg"><label class="fl">Your Content Niche</label>
+      <select class="fs" id="yt-niche">${['Beauty','Fashion','Lifestyle','Travel','Food','Fitness','Tech','Gaming','Finance','Comedy','Education','Other'].map(n=>`<option ${YT.niche===n?'selected':''}>${n}</option>`).join('')}</select>
+    </div>
+    <button type="submit" class="btn-save" id="yt-connect-btn">Analyze My Channel</button>
+    <div class="yt-err" id="yt-err"></div>
+  </form>`;
+}
+
+function buildChannelCard(){
+  return`<div class="ch-card">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--acc-dim);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">📺</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(YT.channelName||YT.handle)}</div>
+      <div style="font-size:12px;color:var(--fg2)">${fmtNum(YT.subs)} subscribers · ${YT.videos.length} videos · ${YT.lastRefresh?timeSince(YT.lastRefresh):'Never'}</div>
+    </div>
+    <button onclick="resetYT()" class="refresh-btn">Change</button>
+  </div>`;
+}
+
+function buildInsights(a){
+  const{patterns,avgViews,topAvgViews,topKeywords,top}=a;
+  const topPat=Object.entries(patterns).sort((x,y)=>y[1].count-x[1].count)[0];
+  const ratio=topAvgViews>0&&avgViews>0?(topAvgViews/avgViews).toFixed(1):'—';
+  const insights=[];
+  if(topPat&&topPat[1].count>0)insights.push(`Your strongest format is <b>${patterns[topPat[0]].label}</b> — found in ${topPat[1].count} of your top 10 videos`);
+  if(ratio!=='—'&&parseFloat(ratio)>1.1)insights.push(`Your top 10 videos average <b>${ratio}× more views</b> than your channel average`);
+  if(topKeywords.length)insights.push(`Most-used words in your top titles: <b>${topKeywords.slice(0,4).join(', ')}</b>`);
+  if(top.length>0){const eng=top.map(v=>v.views>0?(v.likes+v.comments)/v.views:0);const avg=(eng.reduce((s,e)=>s+e,0)/eng.length*100).toFixed(1);if(parseFloat(avg)>0)insights.push(`Average engagement rate on your top videos: <b>${avg}%</b>`)}
+  if(!insights.length)return'';
+  return`<div class="sec-hd">What Works For You</div>${insights.map(i=>`<div class="insight-pill">${i}</div>`).join('')}`;
+}
+
+function buildTopVideos(vids){
+  return`<div class="sec-hd">Your Top Performing Videos</div>${vids.map((v,i)=>`
+    <div class="li">
+      <div class="li-ico" style="background:var(--acc-dim);font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--acc)">${i+1}</div>
+      <div class="li-body"><div class="li-title">${esc(v.title)}</div>
+      <div class="li-sub">${fmtNum(v.views)} views · ${fmtNum(v.likes)} likes · ${fmtNum(v.comments)} comments</div></div>
+    </div>`).join('')}`;
+}
+
+function buildTrending(){
+  return`<div class="sec-hd">Trending in ${esc(YT.niche)} Right Now</div>${YT.trending.map(t=>`
+    <div class="li"><div class="li-ico" style="background:rgba(239,68,68,.1)">🔥</div>
+    <div class="li-body"><div class="li-title">${esc(t.snippet?.title||'—')}</div>
+    <div class="li-sub">${esc(t.snippet?.channelTitle||'—')}</div></div></div>`).join('')}`;
+}
+
+function buildIdeaCards(ideas){
+  return`<div class="sec-hd">Content Ideas For You (${ideas.length})</div>${ideas.map((item,i)=>`
+    <div class="idea-row">
+      <div class="idea-num">${i+1}</div>
+      <div class="idea-text">${esc(item)}</div>
+      <button class="copy-btn" data-idea="${esc(item)}" onclick="copyIdea(this)" title="Copy">📋</button>
+    </div>`).join('')}`;
+}
+
+function copyIdea(btn){
+  const text=btn.dataset.idea;
+  const done=()=>{btn.textContent='✅';setTimeout(()=>btn.textContent='📋',2000)};
+  navigator.clipboard.writeText(text).then(done).catch(done);
+}
+
+// ── YOUTUBE API ───────────────────────────────────────
+async function ytFetch(ep,params){
+  const url=new URL('https://www.googleapis.com/youtube/v3/'+ep);
+  Object.entries({...params,key:YT.apiKey}).forEach(([k,v])=>url.searchParams.set(k,v));
+  const r=await fetch(url);
+  const j=await r.json();
+  if(!r.ok)throw new Error(j.error?.message||(r.status===403?'Invalid API key or quota exceeded':'YouTube API error'));
+  return j;
+}
+
+async function connectChannel(e){
+  e.preventDefault();
+  const btn=document.getElementById('yt-connect-btn');
+  const errEl=document.getElementById('yt-err');
+  btn.textContent='Connecting...';btn.disabled=true;
+  errEl.style.display='none';
+  YT.apiKey=v('yt-key').trim();
+  YT.handle='@'+(v('yt-handle').replace('@','').trim());
+  YT.niche=v('yt-niche');
+  YT.videos=[];YT.trending=[];YT.channelId='';
+  try{
+    const ch=await ytFetch('channels',{part:'snippet,statistics,contentDetails',forHandle:YT.handle});
+    if(!ch.items?.length)throw new Error(`Channel "${YT.handle}" not found. Double-check the handle.`);
+    const c=ch.items[0];
+    YT.channelId=c.id;YT.channelName=c.snippet.title;
+    YT.subs=c.statistics.subscriberCount||0;
+    YT.uploadsId=c.contentDetails.relatedPlaylists.uploads;
+    saveYT();
+    await doRefresh();
+  }catch(err){
+    errEl.textContent=err.message;errEl.style.display='block';
+    btn.textContent='Analyze My Channel';btn.disabled=false;
+  }
+}
+
+async function doRefresh(){
+  const rb=document.getElementById('yt-refresh-btn');
+  if(rb)rb.textContent='Loading...';
+  try{
+    // Videos from uploads playlist
+    const pl=await ytFetch('playlistItems',{part:'contentDetails',playlistId:YT.uploadsId,maxResults:50});
+    if(!pl.items?.length)throw new Error('No videos found on this channel.');
+    const ids=pl.items.map(i=>i.contentDetails.videoId).join(',');
+    const st=await ytFetch('videos',{part:'statistics,snippet',id:ids});
+    YT.videos=(st.items||[]).map(v=>({
+      id:v.id,title:v.snippet.title,
+      views:parseInt(v.statistics.viewCount)||0,
+      likes:parseInt(v.statistics.likeCount)||0,
+      comments:parseInt(v.statistics.commentCount)||0,
+      published:v.snippet.publishedAt
+    }));
+    // Trending search in niche
+    try{
+      const after=new Date(Date.now()-30*86400000).toISOString();
+      const tr=await ytFetch('search',{part:'snippet',type:'video',q:YT.niche,order:'viewCount',publishedAfter:after,maxResults:10,regionCode:'IN'});
+      YT.trending=(tr.items||[]).filter(i=>i.snippet?.channelId!==YT.channelId).slice(0,5);
+    }catch(e){YT.trending=[];}
+    YT.lastRefresh=new Date().toISOString();
+    saveYT();
+    renderIdeas();
+  }catch(err){
+    document.getElementById('ideas-content').innerHTML=`<div class="empty"><div class="em-ico">⚠️</div><h3>Error</h3><p>${esc(err.message)}</p></div>`;
+  }finally{if(rb)rb.textContent='↻ Refresh';}
+}
+
+function resetYT(){YT.channelId='';YT.videos=[];YT.trending=[];saveYT();renderIdeas();}
+
+// ── CONTENT ANALYSIS ──────────────────────────────────
+function analyzeContent(videos){
+  const sorted=[...videos].sort((a,b)=>b.views-a.views);
+  const top=sorted.slice(0,Math.min(10,sorted.length));
+  const patterns={
+    numbered:{count:0,label:'Numbered lists ("5 things...")'},
+    howto:{count:0,label:'How-to tutorials'},
+    personal:{count:0,label:'Personal stories / "I tried"'},
+    comparison:{count:0,label:'Comparisons & vs videos'},
+    review:{count:0,label:'Reviews & honest takes'},
+    challenge:{count:0,label:'Challenges & experiments'},
+  };
+  top.forEach(v=>{
+    const t=v.title.toLowerCase();
+    if(/\d+\s+(thing|way|tip|reason|hack|product|item|must)/.test(t))patterns.numbered.count++;
+    if(/^(how to|how i|tutorial|guide|learn to)/.test(t))patterns.howto.count++;
+    if(/\b(i tried|i tested|i spent|i bought|my honest|day in my|week in my|months of)/.test(t))patterns.personal.count++;
+    if(/\bvs\.?\b| or |\bcompare|\bbetter than/.test(t))patterns.comparison.count++;
+    if(/\b(review|honest|worth it|truth about|real talk|actually)/.test(t))patterns.review.count++;
+    if(/\b(challenge|\d+ days|\d+ hours|experiment|attempt)/.test(t))patterns.challenge.count++;
+  });
+  const stop=new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','my','i','you','your','how','what','why','this','that','is','was','are','be','have','had','do','did','will','can','get','from','it','its','by','me','we','us','our','them','they','new','all','one','two','just','very','so','about','when']);
+  const wc={};
+  top.forEach(v=>{v.title.toLowerCase().replace(/[^\w\s]/g,' ').split(/\s+/).forEach(w=>{if(w.length>3&&!stop.has(w))wc[w]=(wc[w]||0)+1})});
+  const topKeywords=Object.entries(wc).sort((a,b)=>b[1]-a[1]).slice(0,6).map(e=>e[0]);
+  const avgViews=videos.length?videos.reduce((s,v)=>s+v.views,0)/videos.length:0;
+  const topAvgViews=top.length?top.reduce((s,v)=>s+v.views,0)/top.length:0;
+  return{sorted,top,patterns,avgViews,topAvgViews,topKeywords};
+}
+
+// ── IDEA GENERATION ───────────────────────────────────
+function generateIdeas(analysis,trending,niche){
+  const{topKeywords,patterns}=analysis;
+  const kw=topKeywords[0]||niche,kw2=topKeywords[1]||niche,kw3=topKeywords[2]||niche;
+  const trendTitles=trending.map(t=>t.snippet?.title||'').filter(Boolean);
+  const tt=trendTitles[0]?extractTopic(trendTitles[0]):niche;
+  const tt2=trendTitles[1]?extractTopic(trendTitles[1]):kw2;
+  const bank={
+    numbered:[
+      `5 ${kw} products I actually repurchase every month`,
+      `10 honest things nobody tells you about ${kw}`,
+      `7 ${kw} mistakes you're probably making right now`,
+      `3 ${niche} habits that completely changed my routine`,
+      `5 underrated ${kw2} tips that actually work`,
+    ],
+    howto:[
+      `How I built my ${niche} routine from scratch`,
+      `How to start with ${kw} when you have no budget`,
+      `The complete ${kw} guide I wish I had when I started`,
+      `How I went from zero to confident with ${kw}`,
+    ],
+    personal:[
+      `I tried ${tt} for 30 days — completely honest results`,
+      `Spending one week using only ${kw} — what happened`,
+      `My honest ${kw} journey after 6 months`,
+      `I documented my ${kw} experiment so you don't have to`,
+    ],
+    review:[
+      `Honest review: is ${tt} actually worth it in 2025?`,
+      `The truth about ${kw} no ${niche} creator talks about`,
+      `I tested the most hyped ${kw} — real verdict after 30 days`,
+      `${kw2} review: what they don't show in ads`,
+    ],
+    comparison:[
+      `Expensive vs affordable ${kw} — is there a real difference?`,
+      `${tt} vs ${tt2} — which is actually better?`,
+      `I compared the top 3 ${kw} brands so you don't have to`,
+      `Drugstore vs high-end ${kw}: brutally honest test`,
+    ],
+    challenge:[
+      `I did the ${kw} challenge for 30 days straight`,
+      `What happens when you quit ${kw} for a full month`,
+      `I followed a viral ${niche} routine for 2 weeks`,
+      `Using only ${tt} for a full week — results surprised me`,
+    ],
+  };
+  const ideas=[];
+  Object.entries(patterns).sort((a,b)=>b[1].count-a[1].count).forEach(([p])=>{if(bank[p])bank[p].forEach(idea=>ideas.push(idea))});
+  // Capitalise first letter
+  return [...new Set(ideas)].slice(0,12).map(s=>s.charAt(0).toUpperCase()+s.slice(1));
+}
+
+function extractTopic(title){
+  const stop=new Set(['this','that','with','from','have','what','when','were','they','your','their','about','into','been','some','would','could','which','just','very','really','actually','literally','honest']);
+  const words=title.replace(/[^\w\s]/g,' ').split(/\s+/).filter(w=>w.length>3&&!stop.has(w.toLowerCase()));
+  return words.slice(0,3).join(' ').toLowerCase()||title.split(' ').slice(0,2).join(' ').toLowerCase();
+}
+
+// ── MODAL ─────────────────────────────────────────────
+function openModal(html){document.getElementById('modal-body').innerHTML=html;document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function closeModalOnBg(e){if(e.target===document.getElementById('modal'))closeModal()}
+
+// ── FORMS ─────────────────────────────────────────────
+function openIncomeForm(){openModal(`<div class="sheet-title">Add Brand Collab</div>
+  <form onsubmit="submitIncome(event)">
+    <div class="fg"><label class="fl">Brand Name</label><input class="fi" required placeholder="e.g. Mamaearth" id="i-brand"></div>
+    <div class="frow"><div class="fg"><label class="fl">Platform</label><select class="fs" id="i-plat"><option>Instagram</option><option>YouTube</option><option>Both</option></select></div>
+    <div class="fg"><label class="fl">Amount (₹)</label><input class="fi" type="number" required min="0" placeholder="50000" id="i-amt"></div></div>
+    <div class="frow"><div class="fg"><label class="fl">Status</label><select class="fs" id="i-status"><option>Negotiating</option><option>Confirmed</option><option>Delivered</option><option>Received</option></select></div>
+    <div class="fg"><label class="fl">Date</label><input class="fi" type="date" id="i-date" value="${today()}"></div></div>
+    <div class="fg"><label class="fl">Notes (optional)</label><input class="fi" placeholder="Any notes..." id="i-notes"></div>
+    <button type="submit" class="btn-save">Save Collab</button>
+  </form>`)}
+function submitIncome(e){e.preventDefault();S.income.push({id:uid(),brand:v('i-brand'),platform:v('i-plat'),amount:v('i-amt'),status:v('i-status'),date:v('i-date'),notes:v('i-notes')});save();closeModal();render()}
+
+function openDelivForm(){openModal(`<div class="sheet-title">Add Deliverable</div>
+  <form onsubmit="submitDeliv(event)">
+    <div class="fg"><label class="fl">Brand Name</label><input class="fi" required placeholder="e.g. Boat" id="d-brand"></div>
+    <div class="frow"><div class="fg"><label class="fl">Platform</label><select class="fs" id="d-plat"><option>Instagram</option><option>YouTube</option><option>Both</option></select></div>
+    <div class="fg"><label class="fl">Type</label><select class="fs" id="d-type"><option>Reel</option><option>Post</option><option>Video</option><option>Story</option><option>Blog</option></select></div></div>
+    <div class="fg"><label class="fl">Title / Description</label><input class="fi" placeholder="e.g. Unboxing Reel" id="d-title"></div>
+    <div class="frow"><div class="fg"><label class="fl">Due Date</label><input class="fi" type="date" id="d-due" value="${today()}"></div>
+    <div class="fg"><label class="fl">Status</label><select class="fs" id="d-status"><option>Not Started</option><option>In Progress</option><option>Delivered</option><option>Approved</option></select></div></div>
+    <button type="submit" class="btn-save">Save Deliverable</button>
+  </form>`)}
+function submitDeliv(e){e.preventDefault();S.deliverables.push({id:uid(),brand:v('d-brand'),platform:v('d-plat'),type:v('d-type'),title:v('d-title'),dueDate:v('d-due'),status:v('d-status')});save();closeModal();render()}
+
+function openReturnForm(){openModal(`<div class="sheet-title">Track Return Deadline</div>
+  <form onsubmit="submitReturn(event)">
+    <div class="fg"><label class="fl">Product Name</label><input class="fi" required placeholder="e.g. Blue Sneakers" id="r-prod"></div>
+    <div class="frow"><div class="fg"><label class="fl">Store</label><select class="fs" id="r-store"><option>Amazon</option><option>Myntra</option><option>Flipkart</option><option>Nykaa</option><option>Meesho</option><option>Ajio</option><option>Other</option></select></div>
+    <div class="fg"><label class="fl">Order Date</label><input class="fi" type="date" id="r-order" value="${today()}"></div></div>
+    <div class="fg"><label class="fl">Return Deadline</label><input class="fi" type="date" required id="r-deadline">
+      <div class="hint-row">or window: <input type="number" id="r-win" min="1" max="90" placeholder="days"> days <button type="button" onclick="calcDeadline()">Set deadline</button></div>
+    </div>
+    <div class="fg"><label class="fl">Order ID (optional)</label><input class="fi" placeholder="e.g. 405-1234567" id="r-id"></div>
+    <button type="submit" class="btn-save">Track Return</button>
+  </form>`)}
+function calcDeadline(){const od=v('r-order'),w=parseInt(v('r-win'));if(od&&w){const d=new Date(od+'T00:00:00');d.setDate(d.getDate()+w);document.getElementById('r-deadline').value=d.toISOString().split('T')[0]}}
+function submitReturn(e){e.preventDefault();S.returns.push({id:uid(),product:v('r-prod'),store:v('r-store'),orderDate:v('r-order'),returnDeadline:v('r-deadline'),orderId:v('r-id')});save();closeModal();render()}
+
+function openSpendForm(){openModal(`<div class="sheet-title">Add Expense</div>
+  <form onsubmit="submitSpend(event)">
+    <div class="frow"><div class="fg"><label class="fl">Category</label><select class="fs" id="s-cat"><option>Food</option><option>Shopping</option><option>Transport</option><option>Entertainment</option><option>Subscription</option><option>Other</option></select></div>
+    <div class="fg"><label class="fl">Amount (₹)</label><input class="fi" type="number" required min="0" placeholder="500" id="s-amt"></div></div>
+    <div class="frow"><div class="fg"><label class="fl">Date</label><input class="fi" type="date" id="s-date" value="${today()}"></div>
+    <div class="fg"><label class="fl">App (optional)</label><input class="fi" placeholder="e.g. Swiggy" id="s-app"></div></div>
+    <div class="fg"><label class="fl">Note (optional)</label><input class="fi" placeholder="e.g. Team lunch" id="s-note"></div>
+    <button type="submit" class="btn-save">Save Expense</button>
+  </form>`)}
+function submitSpend(e){e.preventDefault();S.spending.push({id:uid(),category:v('s-cat'),amount:v('s-amt'),date:v('s-date'),app:v('s-app'),note:v('s-note')});save();closeModal();render()}
+
+function del(type,id){S[type]=S[type].filter(i=>i.id!==id);save();render()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+load();loadYT();render();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+</script>
